@@ -10,92 +10,48 @@ public class Main_uva00105 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-//        讀取建築物資料，將左邊位置及右邊位置分別儲存，且右邊的高度加上負號(用於辨識該建築物結束位置)
-        ArrayList<int[]> datas = new ArrayList<int[]>();
+//        用來儲存每個位置的最高高度，且題目表示數字最大只會到10000，故為了方便計算索引值將陣列長度加一
+        int[] datas = new int[10001];
+//        用來存放本次輸入的起始位置及結束位置，先別設定最小及最大值
+        int max = 0;
+        int min = 10001;
+
+//        判斷還有整數輸入就繼續讀取
         while (sc.hasNextInt()){
+//            依照題意將每棟建築起始位置、高度、結束位置存取起來
             int left = sc.nextInt(), top = sc.nextInt(), right = sc.nextInt();
-            int[] leftData = {left, top}, rightData = {right, top * -1};
-            datas.add(leftData);
-            datas.add(rightData);
-        }
-
-//        將所有建築物左邊及右邊進行直線上的排序
-        for (int i = 0; i < datas.size(); i++) {
-            for (int j = 0; j < datas.size(); j++) {
-                if (datas.get(i)[0] < datas.get(j)[0] && i != j) {
-                    int[] temp = datas.get(i);
-                    datas.set(i, datas.get(j));
-                    datas.set(j, temp);
+//            本次起始位置如果大於目前建築物起始位置，則本次起始位置改為目前建築物的起始位置
+            if (min > left) {
+                min = left;
+            }
+//            本次結束位置如果小於目前建築物結束位置，則本次結束位置改為目前建築物的結束位置
+            if (max < right) {
+                max = right;
+            }
+//            將目前建築物的高度依照起始及結束位置填入陣列中，有比原先該位置的高度大才填入
+//            注意！如果有一建築物起始位置與另一建築物結束位置相同但高度不同，則需要取起始那方，故填入時不填結束位置
+            for (int i = left; i < right; i++) {
+                if (top > datas[i]) {
+                    datas[i] = top;
                 }
             }
         }
 
-        ArrayList<Integer> current = new ArrayList<>();
-        ArrayList<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < datas.size(); i++) {
-            if (current.size() == 0) {
-                ans.add(datas.get(i)[0]);
-                ans.add(datas.get(i)[1]);
-                current.add(datas.get(i)[1]);
-                Collections.sort(current);
-            }else {
-                int index = datas.get(i)[0];
-                int top = datas.get(i)[1];
-                if (top > 0) {
-                    boolean check = true;
-                    if (top > current.get(current.size() - 1)) {
-                        for (int j = 0; j < ans.size(); j+=2) {
-                            if (ans.get(j) == index && ans.get(j + 1) < top) {
-                                ans.set(j + 1, top);
-                                check = false;
-                                break;
-                            }
-                        }
-                        if (check) {
-                            ans.add(datas.get(i)[0]);
-                            ans.add(datas.get(i)[1]);
-                        }
-                    }
-                    current.add(datas.get(i)[1]);
-                    Collections.sort(current);
+//        用來存放目前讀取到的高度
+        int current = 0;
+
+//        從本次起始位置開始讀取每筆高度直到本次結束位置為止
+        for (int i = min; i <= max; i++) {
+//            如果i位置的高度大於目前高度，則將當前高度修改為i位置高度，且印出i及當前高度
+            if (datas[i] != current) {
+                current = datas[i];
+//                若為結束位置了則不用印每次間隔的空白，且需斷行
+                if (i == max) {
+                    System.out.println(i + " " + current);
                 }else {
-                    removeVale(current, Math.abs(top));
-                    if (current.size() == 0) {
-                        if (ans.get(ans.size() - 2) == index) {
-                            ans.set(ans.size() - 1, 0);
-                        }else {
-                            ans.add(datas.get(i)[0]);
-                            ans.add(0);
-                        }
-                    }else if (Math.abs(top) > current.get(current.size() - 1)) {
-                        if (ans.get(ans.size() - 2) == index && ans.get(ans.size() -1) <= Math.abs(top)) {
-                            ans.set(ans.size() -1, Math.abs(top));
-                        }else {
-                            ans.add(datas.get(i)[0]);
-                            ans.add(current.get(current.size() - 1));
-                        }
-                    }
+                    System.out.print(i + " " + current + " ");
                 }
             }
         }
-
-//        輸出結果
-        for (int i = 0; i < ans.size(); i++) {
-            if (i == ans.size() - 1) {
-                System.out.println(ans.get(i));
-            }else {
-                System.out.print(ans.get(i) + " ");
-            }
-        }
-    }
-
-    public static ArrayList<Integer> removeVale(ArrayList<Integer> list, int top){
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) == top) {
-                list.remove(i);
-                break;
-            }
-        }
-        return list;
     }
 }
