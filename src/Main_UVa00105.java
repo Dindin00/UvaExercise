@@ -1,11 +1,11 @@
-//  UVA題目網址
+//  UVa題目網址
 //  https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=41
 //  中文題目網址
 //  http://luckycat.kshs.kh.edu.tw/homework/q105.htm
 
 import java.util.*;
 
-public class Main_uva00105 {
+public class Main_UVa00105 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
