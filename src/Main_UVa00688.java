@@ -1,3 +1,5 @@
+//  UVa題目網址：
+//  https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=629
 import java.util.*;
 public class Main_UVa00688 {
     public static void main(String[] argv){
